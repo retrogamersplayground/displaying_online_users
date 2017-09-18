@@ -22,9 +22,9 @@ if(isset($_POST["action"]))
  {
   $output = '';
   $query = "
-  SELECT login_details.user_id, user_details.user_email, user_details.user_image FROM login_details 
+  SELECT login_details.memberID, user_details.email, user_details.user_image FROM login_details 
   INNER JOIN user_details 
-  ON user_details.user_id = login_details.user_id 
+  ON user_details.memberID = login_details.memberID 
   WHERE last_activity > DATE_SUB(NOW(), INTERVAL 5 SECOND) 
   AND user_details.user_type = 'user'
   ";
@@ -52,7 +52,7 @@ if(isset($_POST["action"]))
    $output .= '
    <tr> 
     <td>'.$i.'</td>
-    <td>'.$row["user_email"].'</td>
+    <td>'.$row["email"].'</td>
     <td><img src="images/'.$row["user_image"].'" class="img-thumbnail" width="50" /></td>
    </tr>
    ';

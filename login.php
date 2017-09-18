@@ -9,7 +9,7 @@ $message = '';
 
 if(isset($_POST["login"]))
 {
- if(empty($_POST["user_email"]) || empty($_POST["user_password"]))
+ if(empty($_POST["email"]) || empty($_POST["password"]))
  {
   $message = "<label>Both Fields are required</label>";
  }
@@ -17,12 +17,12 @@ if(isset($_POST["login"]))
  {
   $query = "
   SELECT * FROM user_details 
-  WHERE user_email = :user_email
+  WHERE email = :email
   ";
   $statement = $connect->prepare($query);
   $statement->execute(
    array(
-    'user_email' => $_POST["user_email"]
+    'email' => $_POST["email"]
    )
   );
   $count = $statement->rowCount();
@@ -31,17 +31,17 @@ if(isset($_POST["login"]))
    $result = $statement->fetchAll();
    foreach($result as $row)
    {
-    if(password_verify($_POST["user_password"], $row["user_password"]))
+    if(password_verify($_POST["password"], $row["password"]))
     {
      $insert_query = "
      INSERT INTO login_details (
-      user_id, last_activity) VALUES (
-      :user_id, :last_activity)
+      memberID, last_activity) VALUES (
+      :memberID, :last_activity)
      ";
      $statement = $connect->prepare($insert_query);
      $statement->execute(
       array(
-       'user_id'  => $row["user_id"],
+       'memberID'  => $row["memberID"],
        'last_activity' => date("Y-m-d H:i:s", STRTOTIME(date('h:i:sa')))
       )
      );
@@ -89,11 +89,11 @@ if(isset($_POST["login"]))
       <span class="text-danger"><?php echo $message; ?></span>
       <div class="form-group">
        <label>User Email</label>
-       <input type="text" name="user_email" class="form-control" />
+       <input type="text" name="email" class="form-control" />
       </div>
       <div class="form-group">
        <label>Password</label>
-       <input type="password" name="user_password" class="form-control" />
+       <input type="password" name="password" class="form-control" />
       </div>
       <div class="form-group">
        <input type="submit" name="login" value="Login" class="btn btn-info" />
